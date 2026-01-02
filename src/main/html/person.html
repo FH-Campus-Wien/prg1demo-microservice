@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Person anlegen</title>
+</head>
+<body>
+
+    <div>
+          <label  for="vn">Vorname:</label> <br/>
+          <input id="fn" name="firstname" type="text"/> <br/>
+          <label for="ln">Nachname:</label> <br/>
+          <input id="ln" name="lastname" type="text"/> <br/>
+          <button id="ok"  style="margin-top:5px;" >Speichern</button>
+          <span id="message"></span>
+    </div>
+
+    <script>
+        okButton= document.getElementById('ok');
+        messageArea= document.getElementById('message');
+        okButton.addEventListener('click', async (event) =>
+        {
+            firstname= document.getElementById('fn').value;
+            lastname= document.getElementById('ln').value;
+            response = await fetch('http://localhost:7070/person', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({firstname:firstname, lastname:lastname})
+            });
+            message= await response.text();
+            messageArea.innerHTML= message;
+        });
+    </script>
+
+    <script src="https://gist.github.com/devops4us/3998580335e4a4e8cc5d028eb5968ded.js"></script>
+</body>
+</html>
