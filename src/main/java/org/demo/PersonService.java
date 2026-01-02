@@ -14,7 +14,7 @@ public class PersonService
         var app = Javalin.create( config ->
                 config.bundledPlugins.enableCors(cors ->
                    cors.addRule(CorsPluginConfig.CorsRule::anyHost)))
-                .get("/person/list", ctx -> ctx.json(listPersons()))
+                .get("/person/list", ctx -> ctx.json(OBJECTS))
                 .get("/person/{id}", ctx -> ctx.json(getPerson(ctx.pathParam("id"))))
                 .post("/person", ctx -> ctx.json(addPerson(ctx.bodyAsClass(Person.class))))
                 .start(7070);
@@ -26,22 +26,18 @@ public class PersonService
         return OBJECTS.getOrDefault(id, new Person(null,null));
     }
 
-    private static Collection<Person> listPersons() {
-        return OBJECTS.values();
-    }
-
     private static String addPerson(Person p)
     {
         if(p.firstname()==null || p.firstname.isEmpty() || p.lastname == null || p.lastname.isEmpty()) {
             return "Fehler: Vorname und Zuname müssen belegt sein";
         }
-        var newID= (OBJECTS.size()+1)+"";
+        var newID= OBJECTS.size()+"";
         OBJECTS.put(newID, p);
         return "Person gespeichert";
     }
 
     private static Map<String,Person> OBJECTS= new HashMap<String,Person>() {{
-         put("id01",new Person("Max","Mustermann"));
-         put("id02",new Person("Margot","Musterfrau"));
+         put("0",new Person("Max","Mustermann"));
+         put("1",new Person("Margot","Musterfrau"));
     }};
 }
